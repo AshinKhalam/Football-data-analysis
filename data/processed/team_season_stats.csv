@@ -1,0 +1,21 @@
+﻿rank,matches_played,wins,draws,losses,goals_for,goals_against,goal_difference,points,average_attendance,top_scorer_source_text,goalkeeper_source_text,notes,team_id,season,points_adjustment,points_per_match,goals_per_match,goals_conceded_per_match,clean_sheets,shots,shots_on_target,fouls,corners,yellow_cards,red_cards
+1,38,26,7,5,71,27,44,85,60217,Viktor Gyökeres - 14,David Raya,→ Champions League via league finish,arsenal,2025/26,0,2.236842,1.868421,0.710526,19,552,186,391,216,51,0
+2,38,23,9,6,77,35,42,78,52634,Erling Haaland - 27,Gianluigi Donnarumma,→ Champions League via league finish,manchester-city,2025/26,0,2.052632,2.026316,0.921053,16,595,205,367,247,67,0
+3,38,20,11,7,69,50,19,71,73960,Bryan Mbeumo Benjamin Šeško - 11,Senne Lammens,→ Champions League via league finish,manchester-united,2025/26,0,1.868421,1.815789,1.315789,8,596,216,391,182,62,3
+4,38,19,8,11,56,49,7,65,41992,Ollie Watkins - 16,Emiliano Martínez,→ Champions League via league finish,aston-villa,2025/26,0,1.710526,1.473684,1.289474,9,483,170,379,199,58,1
+5,38,17,9,12,63,53,10,60,60368,Hugo Ekitike - 11,Alisson,→ Champions League via league finish,liverpool,2025/26,0,1.578947,1.657895,1.394737,10,588,175,383,232,57,1
+6,38,13,18,7,58,54,4,57,11175,Eli Junior Kroupi - 13,Đorđe Petrović,→ Europa League via league finish,bournemouth,2025/26,0,1.5,1.526316,1.421053,11,525,178,457,212,88,2
+7,38,14,12,12,42,48,-6,54,46493,Brian Brobbey - 7,Robin Roefs,→ Europa League via league finish,sunderland,2025/26,0,1.421053,1.105263,1.263158,11,395,126,407,141,80,3
+8,38,14,11,13,52,46,6,53,31388,Danny Welbeck - 13,Bart Verbruggen,→ Conference League via league finish,brighton-and-hove-albion,2025/26,0,1.394737,1.368421,1.210526,10,495,176,453,185,86,0
+9,38,14,11,13,55,52,3,53,17126,Igor Thiago - 22,Caoimhín Kelleher,,brentford,2025/26,0,1.394737,1.447368,1.368421,10,405,147,390,182,69,0
+10,38,14,10,14,58,52,6,52,39594,João Pedro - 15,Robert Sánchez,,chelsea,2025/26,0,1.368421,1.526316,1.368421,9,511,164,426,231,89,7
+11,38,15,7,16,47,51,-4,52,27203,Harry Wilson - 10,Bernd Leno,,fulham,2025/26,0,1.368421,1.236842,1.342105,9,481,138,414,188,75,1
+12,38,14,7,17,53,55,-2,49,52108,Bruno Guimarães - 9,Nick Pope,,newcastle-united,2025/26,0,1.289474,1.394737,1.447368,8,492,176,386,231,63,2
+13,38,13,10,15,47,50,-3,49,52191,Beto - 9,Jordan Pickford,,everton,2025/26,0,1.289474,1.236842,1.315789,11,420,144,405,163,73,5
+14,38,11,14,13,49,56,-7,47,36695,Dominic Calvert-Lewin - 14,Karl Darlow,,leeds-united,2025/26,0,1.236842,1.289474,1.473684,8,478,151,398,168,62,1
+15,38,11,12,15,41,51,-10,45,24997,Jean-Philippe Mateta - 12,Dean Henderson,→ Europa League,crystal-palace,2025/26,0,1.184211,1.078947,1.342105,12,442,141,398,160,74,2
+16,38,11,11,16,48,51,-3,44,30425,Morgan Gibbs-White - 15,Matz Sels,,nottingham-forest,2025/26,0,1.157895,1.263158,1.342105,9,476,156,407,199,60,0
+17,38,10,11,17,48,57,-9,41,61006,Richarlison - 11,Guglielmo Vicario,,tottenham-hotspur,2025/26,0,1.078947,1.263158,1.5,9,436,150,463,208,101,3
+18,38,10,9,19,46,65,-19,39,62349,Jarrod Bowen - 9,Alphonse Areola,Relegated,west-ham-united,2025/26,0,1.026316,1.210526,1.710526,7,404,142,421,187,67,3
+19,38,4,10,24,38,75,-37,22,21005,Zian Flemming - 11,Martin Dúbravka,Relegated,burnley,2025/26,0,0.578947,1.0,1.973684,4,355,118,394,138,64,2
+20,38,3,11,24,27,68,-41,20,29853,Santiago Bueno Tolu Arokodare... - 3,José Sá,Relegated,wolverhampton-wanderers,2025/26,0,0.526316,0.710526,1.789474,4,370,123,494,130,78,3
