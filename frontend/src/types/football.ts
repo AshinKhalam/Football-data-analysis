@@ -35,3 +35,44 @@ export interface TeamWithStats {
   team: Team;
   stats: TeamSeasonStats;
 }
+
+export interface Player {
+  player_id: string;
+  name: string;
+  nation_code: string;
+  birth_year: number;
+}
+
+export interface PlayerClubStats {
+  team_id: string;
+  team_name: string;
+  position: string;
+  appearances: number;
+  starts: number;
+  minutes: number;
+  goals: number;
+  assists: number;
+  yellow_cards: number;
+  red_cards: number;
+}
+
+export interface PlayerSeasonTotals {
+  appearances: number;
+  starts: number;
+  minutes: number;
+  goals: number;
+  assists: number;
+  goal_contributions: number;
+  yellow_cards: number;
+  red_cards: number;
+  goals_per_90: number | null;
+  assists_per_90: number | null;
+  goal_contributions_per_90: number | null;
+}
+
+export interface PlayerWithStats {
+  player: Player;
+  season: string;
+  totals: PlayerSeasonTotals;
+  clubs: PlayerClubStats[];
+}
