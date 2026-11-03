@@ -4,7 +4,7 @@ from sqlalchemy import text
 
 from app import models  # noqa: F401
 from app.database import engine
-from app.routers import teams
+from app.routers import players, teams
 
 
 app = FastAPI(
@@ -24,6 +24,8 @@ app.add_middleware(
 )
 
 app.include_router(teams.router)
+app.include_router(players.router)
+
 
 @app.get("/")
 def root():

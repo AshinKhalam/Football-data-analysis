@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict
 
+#team stats
 
 class TeamResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -58,3 +59,47 @@ class MatchResponse(BaseModel):
     home_goals: int
     away_goals: int
     result: str
+
+#player stats
+
+class PlayerResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    player_id: str
+    name: str
+    nation_code: str
+    birth_year: int
+
+
+class PlayerClubStatsResponse(BaseModel):
+    team_id: str
+    team_name: str
+    position: str
+    appearances: int
+    starts: int
+    minutes: int
+    goals: int
+    assists: int
+    yellow_cards: int
+    red_cards: int
+
+
+class PlayerSeasonTotalsResponse(BaseModel):
+    appearances: int
+    starts: int
+    minutes: int
+    goals: int
+    assists: int
+    goal_contributions: int
+    yellow_cards: int
+    red_cards: int
+    goals_per_90: float | None
+    assists_per_90: float | None
+    goal_contributions_per_90: float | None
+
+
+class PlayerWithStatsResponse(BaseModel):
+    player: PlayerResponse
+    season: str
+    totals: PlayerSeasonTotalsResponse
+    clubs: list[PlayerClubStatsResponse]
