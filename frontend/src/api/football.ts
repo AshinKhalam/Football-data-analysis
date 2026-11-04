@@ -74,3 +74,25 @@ export async function getPlayerStats(
 
   return response.data;
 }
+
+export async function compareTeams(
+  firstTeamId: string,
+  secondTeamId: string,
+  season: string = "2025/26",
+): Promise<[TeamWithStats, TeamWithStats]> {
+  return Promise.all([
+    getTeamStats(firstTeamId, season),
+    getTeamStats(secondTeamId, season),
+  ]);
+}
+
+export async function comparePlayers(
+  firstPlayerId: string,
+  secondPlayerId: string,
+  season: string = "2025/26",
+): Promise<[PlayerWithStats, PlayerWithStats]> {
+  return Promise.all([
+    getPlayerStats(firstPlayerId, season),
+    getPlayerStats(secondPlayerId, season),
+  ]);
+}
