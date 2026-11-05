@@ -80,10 +80,10 @@ export default function PlayerPicker({
   }
 
   return (
-    <section className="min-w-0 rounded-xl border border-gray-700 bg-gray-900 p-4">
+    <section className="min-w-0 rounded-xl border border-outline bg-surface p-4">
       <label
         htmlFor={id}
-        className="mb-2 block font-medium text-white"
+        className="mb-2 block font-medium text-content"
       >
         {label}
       </label>
@@ -96,28 +96,28 @@ export default function PlayerPicker({
         maxLength={100}
         onChange={(event) => changeSearch(event.target.value)}
         placeholder="Type at least 2 characters"
-        className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white disabled:opacity-50"
+        className="w-full rounded-lg border border-outline bg-surface-raised px-3 py-2 text-content disabled:opacity-50"
       />
 
       <div className="mt-3 min-h-12">
         {selectedPlayer ? (
-          <p className="text-sm text-gray-300">
+          <p className="text-sm text-content">
             Selected:{" "}
-            <span className="font-semibold text-white">
+            <span className="font-semibold text-content">
               {selectedPlayer.name}
             </span>
             {" · "}
             {selectedPlayer.nation_code}
           </p>
         ) : (
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted">
             No player selected.
           </p>
         )}
       </div>
 
       {loading && (
-        <p role="status" className="mt-2 text-sm text-gray-400">
+        <p role="status" className="mt-2 text-sm text-muted">
           Searching…
         </p>
       )}
@@ -132,7 +132,7 @@ export default function PlayerPicker({
         !error &&
         search.trim().length >= 2 &&
         results.length === 0 && (
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-2 text-sm text-muted">
             No matching players.
           </p>
         )}
@@ -146,12 +146,12 @@ export default function PlayerPicker({
                   type="button"
                   disabled={disabled}
                   onClick={() => choosePlayer(player)}
-                  className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-left hover:border-blue-400 disabled:opacity-50"
+                  className="w-full rounded-lg border border-outline bg-surface-raised p-3 text-left hover:border-outline-strong disabled:opacity-50"
                 >
-                  <span className="block text-white">
+                  <span className="block text-content">
                     {player.name}
                   </span>
-                  <span className="text-sm text-gray-400">
+                  <span className="text-sm text-muted">
                     {player.nation_code} · Born {player.birth_year}
                   </span>
                 </button>
@@ -159,7 +159,7 @@ export default function PlayerPicker({
             ))}
           </ul>
 
-          <p className="mt-2 text-xs text-gray-400">
+          <p className="mt-2 text-xs text-muted">
             Showing up to 10 matches. Refine your search if needed.
           </p>
         </>

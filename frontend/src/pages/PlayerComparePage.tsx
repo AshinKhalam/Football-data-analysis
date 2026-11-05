@@ -174,12 +174,12 @@ export default function PlayerComparePage() {
       : [];
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <header className="mb-6">
-        <h1 className="text-3xl font-bold text-white">
+        <h1 className="text-3xl font-bold text-content">
           Compare Players
         </h1>
-        <p className="mt-2 text-gray-400">
+        <p className="mt-2 text-muted">
           Premier League · 2025/26 · All clubs combined
         </p>
       </header>
@@ -187,7 +187,7 @@ export default function PlayerComparePage() {
       <div className="grid items-start gap-4 md:grid-cols-2">
         <PlayerPicker
           id="first-player-search"
-          label="Player A — blue"
+          label="Player A"
           selectedPlayer={firstPlayer}
           disabled={loading}
           onSelect={chooseFirst}
@@ -195,7 +195,7 @@ export default function PlayerComparePage() {
 
         <PlayerPicker
           id="second-player-search"
-          label="Player B — orange"
+          label="Player B"
           selectedPlayer={secondPlayer}
           disabled={loading}
           onSelect={chooseSecond}
@@ -212,13 +212,13 @@ export default function PlayerComparePage() {
         type="button"
         disabled={!canCompare}
         onClick={() => void handleCompare()}
-        className="my-5 rounded-lg bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40"
+        className="my-5 min-h-11 rounded-lg bg-accent px-5 py-2 font-medium text-on-accent hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40"
       >
         {loading ? "Comparing…" : "Compare players"}
       </button>
 
       {loading && (
-        <p role="status" className="text-gray-400">
+        <p role="status" className="text-muted">
           Loading player statistics…
         </p>
       )}
@@ -231,20 +231,20 @@ export default function PlayerComparePage() {
 
       {first && second && (
         <>
-          <h2 className="mb-4 text-2xl font-semibold text-white">
+          <h2 className="mb-4 text-2xl font-semibold text-content">
             {first.player.name} vs {second.player.name}
           </h2>
 
-          <p className="mb-5 rounded-lg border border-gray-700 p-4 text-sm text-gray-300">
-            Per-90 figures adjust for playing time, but can be misleading
-            for players with very few minutes. Compare minutes and playing
-            roles alongside these attacking statistics. These metrics are
-            not an overall player rating.
+          <p className="mb-5 rounded-lg border border-outline p-4 text-sm text-muted">
+            Per-90 figures adjust for playing time, but can be misleading for
+            players with very few minutes. Compare minutes and playing roles
+            alongside these attacking statistics. These metrics are not an
+            overall player rating.
           </p>
 
-          <section className="mb-6 rounded-xl border border-gray-700 bg-gray-900 p-4">
+          <section className="mb-6 rounded-xl border border-outline bg-surface p-4">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-lg font-semibold text-white">
+              <h3 className="text-lg font-semibold text-content">
                 Goals and assists
               </h3>
 
@@ -253,10 +253,10 @@ export default function PlayerComparePage() {
                   type="button"
                   aria-pressed={mode === "totals"}
                   onClick={() => setMode("totals")}
-                  className={`rounded-lg px-3 py-2 text-sm ${
+                  className={`min-h-11 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     mode === "totals"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-800 text-gray-300"
+                      ? "bg-accent text-on-accent"
+                      : "bg-surface-raised text-muted hover:bg-surface-hover hover:text-content"
                   }`}
                 >
                   Season totals
@@ -266,10 +266,10 @@ export default function PlayerComparePage() {
                   type="button"
                   aria-pressed={mode === "per90"}
                   onClick={() => setMode("per90")}
-                  className={`rounded-lg px-3 py-2 text-sm ${
+                  className={`min-h-11 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     mode === "per90"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-800 text-gray-300"
+                      ? "bg-accent text-on-accent"
+                      : "bg-surface-raised text-muted hover:bg-surface-hover hover:text-content"
                   }`}
                 >
                   Per 90 minutes
@@ -280,47 +280,72 @@ export default function PlayerComparePage() {
             <div style={{ width: "100%", height: 320, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis dataKey="metric" stroke="#9ca3af" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="var(--chart-grid)"
+                  />
+
+                  <XAxis
+                    dataKey="metric"
+                    stroke="var(--text-secondary)"
+                    tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
+                  />
+
                   <YAxis
                     allowDecimals={mode === "per90"}
-                    stroke="#9ca3af"
+                    stroke="var(--text-secondary)"
+                    tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
                   />
+
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#111827",
-                      borderColor: "#4b5563",
-                      color: "#ffffff",
+                      backgroundColor: "var(--surface)",
+                      borderColor: "var(--border-strong)",
+                      color: "var(--text-primary)",
                     }}
-                    labelStyle={{ color: "#ffffff" }}
-                    cursor={{ fill: "#ffffff", fillOpacity: 0.05 }}
+                    labelStyle={{
+                      color: "var(--text-primary)",
+                      marginBottom: 6,
+                    }}
+                    cursor={{
+                      fill: "var(--surface-hover)",
+                    }}
                   />
-                  <Legend />
+
+                  <Legend
+                    formatter={(value) => (
+                      <span style={{ color: "var(--text-primary)" }}>
+                        {value}
+                      </span>
+                    )}
+                  />
+
                   <Bar
                     dataKey="first"
                     name={first.player.name}
-                    fill="#3b82f6"
+                    fill="var(--chart-series-a)"
                     radius={[4, 4, 0, 0]}
                   />
+
                   <Bar
                     dataKey="second"
                     name={second.player.name}
-                    fill="#f97316"
+                    fill="var(--chart-series-b)"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="mt-2 text-sm text-muted">
               {mode === "totals"
                 ? "Total contributions across the season."
                 : "Contributions per 90 minutes played. Missing rates are not treated as zero."}
             </p>
           </section>
 
-          <section className="mb-6 rounded-xl border border-gray-700 bg-gray-900 p-4">
-            <h3 className="mb-4 text-lg font-semibold text-white">
+          <section className="mb-6 rounded-xl border border-outline bg-surface p-4">
+            <h3 className="mb-4 text-lg font-semibold text-content">
               Side-by-side statistics
             </h3>
 
@@ -330,15 +355,23 @@ export default function PlayerComparePage() {
                   Season statistics for the selected players
                 </caption>
 
-                <thead className="border-b border-gray-700">
+                <thead className="border-b border-outline">
                   <tr>
-                    <th scope="col" className="px-3 py-3 text-gray-400">
+                    <th scope="col" className="px-3 py-3 text-muted">
                       Metric
                     </th>
-                    <th scope="col" className="px-3 py-3 text-blue-400">
+                    <th
+                      scope="col"
+                      className="px-3 py-3"
+                      style={{ color: "var(--chart-series-a)" }}
+                    >
                       {first.player.name}
                     </th>
-                    <th scope="col" className="px-3 py-3 text-orange-400">
+                    <th
+                      scope="col"
+                      className="px-3 py-3"
+                      style={{ color: "var(--chart-series-b)" }}
+                    >
                       {second.player.name}
                     </th>
                   </tr>
@@ -346,19 +379,19 @@ export default function PlayerComparePage() {
 
                 <tbody>
                   {tableRows.map((row) => (
-                    <tr key={row.label} className="border-b border-gray-800">
+                    <tr key={row.label} className="border-b border-outline">
                       <th
                         scope="row"
-                        className="px-3 py-3 font-medium text-gray-300"
+                        className="px-3 py-3 font-medium text-content"
                       >
                         {row.label}
                       </th>
-                      <td className="px-3 py-3 text-white">
+                      <td className="px-3 py-3 text-content">
                         {typeof row.first === "number"
                           ? row.first.toLocaleString()
                           : row.first}
                       </td>
-                      <td className="px-3 py-3 text-white">
+                      <td className="px-3 py-3 text-content">
                         {typeof row.second === "number"
                           ? row.second.toLocaleString()
                           : row.second}
@@ -374,9 +407,9 @@ export default function PlayerComparePage() {
             {[first, second].map((data) => (
               <section
                 key={data.player.player_id}
-                className="rounded-xl border border-gray-700 bg-gray-900 p-4"
+                className="rounded-xl border border-outline bg-surface p-4"
               >
-                <h3 className="mb-3 font-semibold text-white">
+                <h3 className="mb-3 font-semibold text-content">
                   {data.player.name} — club breakdown
                 </h3>
 
@@ -384,9 +417,9 @@ export default function PlayerComparePage() {
                   {data.clubs.map((club) => (
                     <li
                       key={club.team_id}
-                      className="rounded-lg bg-gray-800 p-3 text-sm text-gray-300"
+                      className="rounded-lg bg-surface-raised p-3 text-sm text-muted"
                     >
-                      <p className="font-medium text-white">
+                      <p className="font-medium text-content">
                         {club.team_name} · {club.position}
                       </p>
                       <p className="mt-1">

@@ -1,15 +1,88 @@
 @import "tailwindcss";
 
+/* Light mode */
 :root {
+  color-scheme: light;
+
+  --app-bg: #f3f4f2;
+  --surface: #ffffff;
+  --surface-raised: #e9ece8;
+  --surface-hover: #e1e7e0;
+
+  --text-primary: #202522;
+  --text-secondary: #526057;
+
+  --border: #a3bbaa;
+  --border-strong: #38734c;
+
+  --accent: #286b40;
+  --accent-hover: #205734;
+  --accent-contrast: #ffffff;
+
+  --selection-bg: #e2eee3;
+  --chart-grid: #d4ddd5;
+
+  --chart-series-a: #286b40;
+  --chart-series-b: #7953a6;
+
   font-family: Inter, system-ui, Arial, sans-serif;
-  color: #e5e7eb;
-  background-color: #111827;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* Dark mode */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --app-bg: #191a1a;
+  --surface: #222424;
+  --surface-raised: #2b2e2d;
+  --surface-hover: #333936;
+
+  --text-primary: #ecefed;
+  --text-secondary: #afb8b2;
+
+  --border: #3c5947;
+  --border-strong: #76b487;
+
+  --accent: #8bc79a;
+  --accent-hover: #a2d6ae;
+  --accent-contrast: #15251a;
+
+  --selection-bg: #283b2e;
+  --chart-grid: #39463d;
+
+  --chart-series-a: #8bc79a;
+  --chart-series-b: #c3a2e3;
+}
+
+/* Expose the variables as Tailwind utility colors. */
+@theme inline {
+  --color-app-bg: var(--app-bg);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-content: var(--text-primary);
+  --color-muted: var(--text-secondary);
+
+  --color-outline: var(--border);
+  --color-outline-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--accent-contrast);
+
+  --color-selection: var(--selection-bg);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+
+  background: var(--app-bg);
+  color: var(--text-primary);
 }
 
 #root {
@@ -17,7 +90,42 @@ body {
   min-height: 100vh;
 }
 
+button,
+input,
 select {
-  color: #111827;
-  background-color: white;
+  font: inherit;
+}
+
+button:not(:disabled),
+select:not(:disabled) {
+  cursor: pointer;
+}
+
+input,
+select {
+  min-height: 44px;
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+:where(button, input, select, a):focus-visible {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--text-primary);
+}
+
+.analytics-section {
+  scroll-margin-top: 100px;
+}
+
+.chart-tooltip {
+  background: var(--surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 12px;
+  color: var(--text-primary) !important;
 }

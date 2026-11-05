@@ -3,7 +3,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -240,24 +239,20 @@ export default function ComparePage() {
       : [];
 
   const invalidSelection =
-    !firstTeamId ||
-    !secondTeamId ||
-    firstTeamId === secondTeamId;
+    !firstTeamId || !secondTeamId || firstTeamId === secondTeamId;
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <header className="mb-6">
-        <h1 className="text-3xl font-bold text-white">
-          Compare Teams
-        </h1>
+        <h1 className="text-3xl font-bold text-content">Compare Teams</h1>
 
-        <p className="mt-2 text-gray-400">
+        <p className="mt-2 text-muted">
           Compare Premier League performance for the 2025/26 season.
         </p>
       </header>
 
       {teamsLoading && (
-        <p role="status" className="text-gray-400">
+        <p role="status" className="text-muted">
           Loading teams…
         </p>
       )}
@@ -271,12 +266,12 @@ export default function ComparePage() {
       {!teamsLoading && !teamsError && (
         <section
           aria-label="Select teams to compare"
-          className="mb-6 rounded-xl border border-gray-700 bg-gray-900 p-4"
+          className="mb-6 rounded-xl border border-outline bg-surface p-4"
         >
           <div className="grid gap-4 sm:grid-cols-2">
             <TeamSelector
               id="compare-first-team"
-              label="Team A — blue"
+              label="Team A"
               value={firstTeamId}
               teams={teams}
               disabled={comparing}
@@ -285,7 +280,7 @@ export default function ComparePage() {
 
             <TeamSelector
               id="compare-second-team"
-              label="Team B — orange"
+              label="Team B"
               value={secondTeamId}
               teams={teams}
               disabled={comparing}
@@ -303,7 +298,7 @@ export default function ComparePage() {
             type="button"
             disabled={invalidSelection || comparing}
             onClick={() => void handleCompare()}
-            className="mt-4 rounded-lg bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-4 min-h-11 rounded-lg bg-accent px-5 py-2 font-medium text-on-accent hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40"
           >
             {comparing ? "Comparing…" : "Compare teams"}
           </button>
@@ -320,7 +315,7 @@ export default function ComparePage() {
       )}
 
       {comparing && (
-        <p role="status" className="text-gray-400">
+        <p role="status" className="text-muted">
           Loading comparison…
         </p>
       )}
@@ -328,18 +323,18 @@ export default function ComparePage() {
       {first && second && (
         <>
           <header className="mb-6">
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-2xl font-semibold text-content">
               {first.team.name} vs {second.team.name}
             </h2>
 
-            <p className="mt-2 text-sm text-gray-400">
-              Season {first.stats.season}. Compare each metric between
-              teams; lower goals conceded and fewer losses indicate
-              better results for those metrics.
+            <p className="mt-2 text-sm text-muted">
+              Season {first.stats.season}. Compare each metric between teams;
+              lower goals conceded and fewer losses indicate better results for
+              those metrics.
             </p>
           </header>
 
-          <div className="mb-6 grid gap-6 lg:grid-cols-2">
+          <div className="mb-6 grid grid-cols-1 gap-6 xl:grid-cols-2">
             <ComparisonChart
               title="Goals and defending"
               data={goalData}
@@ -355,8 +350,8 @@ export default function ComparePage() {
             />
           </div>
 
-          <section className="rounded-xl border border-gray-700 bg-gray-900 p-4">
-            <h3 className="mb-4 text-lg font-semibold text-white">
+          <section className="rounded-xl border border-outline bg-surface p-4">
+            <h3 className="mb-4 text-lg font-semibold text-content">
               Side-by-side statistics
             </h3>
 
@@ -367,15 +362,23 @@ export default function ComparePage() {
                   {second.team.name}
                 </caption>
 
-                <thead className="border-b border-gray-700">
+                <thead className="border-b border-outline">
                   <tr>
-                    <th scope="col" className="px-3 py-3 text-gray-400">
+                    <th scope="col" className="px-3 py-3 text-muted">
                       Metric
                     </th>
-                    <th scope="col" className="px-3 py-3 text-blue-400">
+                    <th
+                      scope="col"
+                      className="px-3 py-3"
+                      style={{ color: "var(--chart-series-a)" }}
+                    >
                       {first.team.name}
                     </th>
-                    <th scope="col" className="px-3 py-3 text-orange-400">
+                    <th
+                      scope="col"
+                      className="px-3 py-3"
+                      style={{ color: "var(--chart-series-b)" }}
+                    >
                       {second.team.name}
                     </th>
                   </tr>
@@ -383,20 +386,17 @@ export default function ComparePage() {
 
                 <tbody>
                   {tableRows.map((row) => (
-                    <tr
-                      key={row.label}
-                      className="border-b border-gray-800"
-                    >
+                    <tr key={row.label} className="border-b border-outline">
                       <th
                         scope="row"
-                        className="px-3 py-3 font-medium text-gray-300"
+                        className="px-3 py-3 font-medium text-content"
                       >
                         {row.label}
                       </th>
-                      <td className="px-3 py-3 text-white">
+                      <td className="px-3 py-3 text-content">
                         {row.first.toLocaleString()}
                       </td>
-                      <td className="px-3 py-3 text-white">
+                      <td className="px-3 py-3 text-content">
                         {row.second.toLocaleString()}
                       </td>
                     </tr>
@@ -432,7 +432,7 @@ function TeamSelector({
     <div>
       <label
         htmlFor={id}
-        className="mb-2 block text-sm font-medium text-gray-300"
+        className="mb-2 block text-sm font-medium text-content"
       >
         {label}
       </label>
@@ -442,7 +442,7 @@ function TeamSelector({
         value={value}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full rounded-lg border border-gray-600 px-3 py-2 disabled:opacity-50"
+        className="w-full rounded-lg border border-outline bg-surface-raised px-3 py-2 text-content disabled:opacity-50"
       >
         <option value="" disabled>
           Select a team
@@ -471,57 +471,116 @@ function ComparisonChart({
   firstName,
   secondName,
 }: ComparisonChartProps) {
-  return (
-    <section className="min-w-0 rounded-xl border border-gray-700 bg-gray-900 p-4">
-      <h3 className="mb-4 text-lg font-semibold text-white">
-        {title}
-      </h3>
+  const height = Math.max(300, data.length * 85 + 60);
 
-      <div style={{ width: "100%", height: 320, minWidth: 0 }}>
+  return (
+    <section className="min-w-0 rounded-2xl border border-outline bg-surface p-4 shadow-sm sm:p-6">
+      <header className="mb-5">
+        <h3 className="text-lg font-semibold tracking-tight text-content">
+          {title}
+        </h3>
+
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
+          <span className="inline-flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              className="h-3 w-3 rounded-sm"
+              style={{ backgroundColor: "var(--chart-series-a)" }}
+            />
+            {firstName}
+          </span>
+
+          <span className="inline-flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              className="h-3 w-3 rounded-sm"
+              style={{ backgroundColor: "var(--chart-series-b)" }}
+            />
+            {secondName}
+          </span>
+        </div>
+      </header>
+
+      <div
+        style={{
+          width: "100%",
+          height,
+          minWidth: 0,
+        }}
+      >
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
-            margin={{ top: 10, right: 10, bottom: 10, left: 0 }}
+            layout="vertical"
+            margin={{
+              top: 4,
+              right: 12,
+              bottom: 4,
+              left: 0,
+            }}
+            barGap={4}
+            barCategoryGap="25%"
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+            <CartesianGrid
+              horizontal={false}
+              stroke="var(--chart-grid)"
+              strokeDasharray="3 3"
+            />
 
             <XAxis
-              dataKey="metric"
-              stroke="#9ca3af"
-              tick={{ fontSize: 12 }}
-              interval={0}
+              type="number"
+              allowDecimals={false}
+              axisLine={false}
+              tickLine={false}
+              tick={{
+                fill: "var(--text-secondary)",
+                fontSize: 12,
+              }}
+              minTickGap={25}
             />
 
             <YAxis
-              allowDecimals={false}
-              stroke="#9ca3af"
-              width={40}
+              type="category"
+              dataKey="metric"
+              width={105}
+              axisLine={false}
+              tickLine={false}
+              tick={{
+                fill: "var(--text-primary)",
+                fontSize: 12,
+              }}
             />
 
             <Tooltip
               contentStyle={{
-                backgroundColor: "#111827",
-                borderColor: "#4b5563",
-                color: "#ffffff",
+                backgroundColor: "var(--surface)",
+                border: "1px solid var(--border-strong)",
+                borderRadius: 12,
+                color: "var(--text-primary)",
               }}
-              labelStyle={{ color: "#ffffff" }}
-              cursor={{ fill: "#ffffff", fillOpacity: 0.05 }}
+              labelStyle={{
+                color: "var(--text-primary)",
+                marginBottom: 6,
+              }}
+              cursor={{
+                fill: "var(--surface-hover)",
+              }}
             />
-
-            <Legend />
 
             <Bar
               dataKey="first"
               name={firstName}
-              fill="#3b82f6"
-              radius={[4, 4, 0, 0]}
+              fill="var(--chart-series-a)"
+              maxBarSize={22}
+              radius={[0, 4, 4, 0]}
             />
 
             <Bar
               dataKey="second"
               name={secondName}
-              fill="#f97316"
-              radius={[4, 4, 0, 0]}
+              fill="var(--chart-series-b)"
+              maxBarSize={22}
+              radius={[0, 4, 4, 0]}
             />
           </BarChart>
         </ResponsiveContainer>

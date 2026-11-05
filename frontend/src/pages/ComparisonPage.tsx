@@ -16,10 +16,10 @@ export default function ComparisonPage() {
           type="button"
           aria-pressed={mode === "teams"}
           onClick={() => setMode("teams")}
-          className={`rounded-lg px-4 py-2 text-sm ${
+          className={`min-h-11 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
             mode === "teams"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-800 text-gray-300"
+              ? "bg-accent text-on-accent"
+              : "bg-surface-raised text-muted hover:bg-surface-hover hover:text-content"
           }`}
         >
           Compare teams
@@ -29,10 +29,10 @@ export default function ComparisonPage() {
           type="button"
           aria-pressed={mode === "players"}
           onClick={() => setMode("players")}
-          className={`rounded-lg px-4 py-2 text-sm ${
+          className={`min-h-11 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
             mode === "players"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-800 text-gray-300"
+              ? "bg-accent text-on-accent"
+              : "bg-surface-raised text-muted hover:bg-surface-hover hover:text-content"
           }`}
         >
           Compare players

@@ -45,7 +45,7 @@ export default function LeagueTable({
   }, []);
 
   if (loading) {
-    return <p className="text-gray-400">Loading league table…</p>;
+    return <p className="text-muted">Loading league table…</p>;
   }
 
   if (error) {
@@ -57,33 +57,46 @@ export default function LeagueTable({
   }
 
   return (
-    <section className="mb-8 rounded-xl border border-gray-700 bg-gray-900 p-4">
-      <h2 className="mb-4 text-xl font-semibold text-white">
+    <section className="mb-8 rounded-xl border border-outline bg-surface p-3 sm:p-4">
+      <h2 className="mb-3 text-lg font-semibold text-content sm:text-xl sm:mb-4">
         Premier League table — 2025/26
       </h2>
 
-      <p className="mb-4 text-sm text-gray-400">
+      <p className="mb-3 text-sm text-muted sm:mb-4">
         Select a team name to view its statistics below.
       </p>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
+        <table className="w-full min-w-[440px] border-collapse text-left text-xs sm:text-sm">
           <caption className="sr-only">
             Premier League standings for the 2025/26 season
           </caption>
 
-          <thead className="border-b border-gray-700 text-gray-400">
+          <thead className="border-b border-outline text-muted">
             <tr>
-              <th scope="col" className="px-3 py-3">Pos</th>
-              <th scope="col" className="px-3 py-3">Team</th>
-              <th scope="col" className="px-3 py-3">P</th>
-              <th scope="col" className="px-3 py-3">W</th>
-              <th scope="col" className="px-3 py-3">D</th>
-              <th scope="col" className="px-3 py-3">L</th>
-              <th scope="col" className="px-3 py-3">GF</th>
-              <th scope="col" className="px-3 py-3">GA</th>
-              <th scope="col" className="px-3 py-3">GD</th>
-              <th scope="col" className="px-3 py-3">Pts</th>
+              <th
+                scope="col"
+                className="px-2 py-2 text-right sm:px-3 sm:py-3"
+              >
+                Pos
+              </th>
+
+              <th
+                scope="col"
+                className="sticky left-0 z-10 bg-surface px-2 py-2 text-left sm:px-3 sm:py-3"
+              >
+                Team
+              </th>
+
+              {["P", "W", "D", "L", "GF", "GA", "GD", "Pts"].map((heading) => (
+                <th
+                  key={heading}
+                  scope="col"
+                  className="px-2 py-2 text-right sm:px-3 sm:py-3"
+                >
+                  {heading}
+                </th>
+              ))}
             </tr>
           </thead>
 
@@ -94,36 +107,67 @@ export default function LeagueTable({
               return (
                 <tr
                   key={team.team_id}
-                  className={
-                    selected
-                      ? "border-b border-gray-800 bg-blue-950"
-                      : "border-b border-gray-800 hover:bg-gray-800"
-                  }
+                  onClick={() => onSelectTeam(team.team_id)}
+                  className={`group cursor-pointer transition-colors focus-within:bg-selection ${
+                    selected ? "bg-selection" : "hover:bg-surface-hover"
+                  }`}
                 >
-                  <td className="px-3 py-3">{stats.rank}</td>
+                  <td className="border-b border-outline px-2 py-2 text-right text-muted tabular-nums sm:px-3 sm:py-3">
+                    {stats.rank}
+                  </td>
 
-                  <th scope="row" className="px-3 py-3 font-medium">
+                  <th
+                    scope="row"
+                    className={`sticky left-0 z-10 border-b border-outline px-2 py-2 text-left font-medium sm:px-3 sm:py-3 ${
+                      selected
+                        ? "bg-selection"
+                        : "bg-surface group-hover:bg-surface-hover"
+                    }`}
+                  >
                     <button
                       type="button"
-                      onClick={() => onSelectTeam(team.team_id)}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onSelectTeam(team.team_id);
+                      }}
                       aria-pressed={selected}
-                      className="text-left text-white underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-blue-400"
+                      aria-label={`View ${team.name} analytics`}
+                      className="min-h-9 text-left text-content underline-offset-4 hover:underline sm:min-h-11"
                     >
-                      {team.name}
+                      {teamDisplayName(team.name)}
                     </button>
                   </th>
 
-                  <td className="px-3 py-3">{stats.matches_played}</td>
-                  <td className="px-3 py-3">{stats.wins}</td>
-                  <td className="px-3 py-3">{stats.draws}</td>
-                  <td className="px-3 py-3">{stats.losses}</td>
-                  <td className="px-3 py-3">{stats.goals_for}</td>
-                  <td className="px-3 py-3">{stats.goals_against}</td>
-                  <td className="px-3 py-3">
+                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                    {stats.matches_played}
+                  </td>
+
+                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                    {stats.wins}
+                  </td>
+
+                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                    {stats.draws}
+                  </td>
+
+                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                    {stats.losses}
+                  </td>
+
+                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                    {stats.goals_for}
+                  </td>
+
+                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                    {stats.goals_against}
+                  </td>
+
+                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
                     {stats.goal_difference > 0 ? "+" : ""}
                     {stats.goal_difference}
                   </td>
-                  <td className="px-3 py-3 font-bold text-white">
+
+                  <td className="border-b border-outline px-2 py-2 text-right font-semibold text-content tabular-nums sm:px-3 sm:py-3">
                     {stats.points}
                   </td>
                 </tr>
@@ -134,4 +178,20 @@ export default function LeagueTable({
       </div>
     </section>
   );
+}
+
+function teamDisplayName(name: string): string {
+  const shortNames: Record<string, string> = {
+    "Manchester United": "Man United",
+    "Manchester City": "Man City",
+    "Brighton and Hove Albion": "Brighton",
+    "Tottenham Hotspur": "Tottenham",
+    "Wolverhampton Wanderers": "Wolves",
+    "Newcastle United": "Newcastle",
+    "West Ham United": "West Ham",
+    "Nottingham Forest": "Nottm Forest",
+    "AFC Bournemouth": "Bournemouth",
+  };
+
+  return shortNames[name] ?? name;
 }

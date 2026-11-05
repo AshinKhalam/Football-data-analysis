@@ -183,24 +183,24 @@ export default function PlayersPage() {
     : [];
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <header className="mb-6">
-        <h1 className="text-3xl font-bold text-white">
+        <h1 className="text-3xl font-bold text-content">
           Player Statistics
         </h1>
-        <p className="mt-2 text-gray-400">
+        <p className="mt-2 text-muted">
           Premier League · 2025/26
         </p>
       </header>
 
       <section
         aria-label="Player filters"
-        className="mb-6 grid gap-4 rounded-xl border border-gray-700 bg-gray-900 p-4 sm:grid-cols-2"
+        className="mb-6 grid gap-4 rounded-xl border border-outline bg-surface p-4 sm:grid-cols-2"
       >
         <div>
           <label
             htmlFor="player-search"
-            className="mb-2 block text-sm text-gray-300"
+            className="mb-2 block text-sm text-content"
           >
             Search by name
           </label>
@@ -212,14 +212,14 @@ export default function PlayersPage() {
             maxLength={100}
             onChange={(event) => changeSearch(event.target.value)}
             placeholder="For example, Haaland"
-            className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white"
+            className="w-full rounded-lg border border-outline bg-surface-raised px-3 py-2 text-content placeholder:text-muted focus:border-outline-strong focus:outline-none focus:ring-2 focus:ring-accent/30"
           />
         </div>
 
         <div>
           <label
             htmlFor="player-team"
-            className="mb-2 block text-sm text-gray-300"
+            className="mb-2 block text-sm text-content"
           >
             Filter by club
           </label>
@@ -228,7 +228,7 @@ export default function PlayersPage() {
             id="player-team"
             value={teamId}
             onChange={(event) => changeTeam(event.target.value)}
-            className="w-full rounded-lg border border-gray-600 px-3 py-2"
+            className="w-full rounded-lg border border-outline bg-surface-raised px-3 py-2 text-content focus:border-outline-strong focus:outline-none focus:ring-2 focus:ring-accent/30"
           >
             <option value="">All clubs</option>
 
@@ -250,14 +250,14 @@ export default function PlayersPage() {
       <div className="grid items-start gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
         <section
           aria-label="Player results"
-          className="rounded-xl border border-gray-700 bg-gray-900 p-4"
+          className="rounded-xl border border-outline bg-surface p-4"
         >
-          <h2 className="mb-4 text-lg font-semibold text-white">
+          <h2 className="mb-4 text-lg font-semibold text-content">
             Players
           </h2>
 
           {listLoading && (
-            <p role="status" className="text-gray-400">
+            <p role="status" className="text-muted">
               Loading players…
             </p>
           )}
@@ -269,7 +269,7 @@ export default function PlayersPage() {
           )}
 
           {!listLoading && !listError && players.length === 0 && (
-            <p className="text-gray-400">
+            <p className="text-muted">
               No players on this page. Adjust your filters or go back.
             </p>
           )}
@@ -285,16 +285,16 @@ export default function PlayersPage() {
                       type="button"
                       aria-pressed={selected}
                       onClick={() => selectPlayer(player.player_id)}
-                      className={`w-full rounded-lg border p-3 text-left transition ${
+                      className={`w-full rounded-lg border p-3 text-left transition-colors ${
                         selected
-                          ? "border-blue-500 bg-blue-950"
-                          : "border-gray-700 bg-gray-800 hover:border-gray-500"
+                          ? "border-outline-strong bg-selection"
+                          : "border-outline bg-surface-raised hover:border-outline-strong hover:bg-surface-hover"
                       }`}
                     >
-                      <span className="block font-medium text-white">
+                      <span className="block font-medium text-content">
                         {player.name}
                       </span>
-                      <span className="text-sm text-gray-400">
+                      <span className="text-sm text-muted">
                         {player.nation_code} · Born {player.birth_year}
                       </span>
                     </button>
@@ -309,12 +309,12 @@ export default function PlayersPage() {
               type="button"
               disabled={offset === 0 || listLoading}
               onClick={() => changePage(Math.max(0, offset - PAGE_SIZE))}
-              className="rounded border border-gray-600 px-3 py-2 text-sm disabled:opacity-40"
+              className="min-h-11 rounded-lg border border-outline bg-surface-raised px-3 py-2 text-sm text-content transition-colors hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40"
             >
               Previous
             </button>
 
-            <span className="text-sm text-gray-400">
+            <span className="text-sm text-muted">
               Page {Math.floor(offset / PAGE_SIZE) + 1}
             </span>
 
@@ -326,7 +326,7 @@ export default function PlayersPage() {
                 players.length < PAGE_SIZE
               }
               onClick={() => changePage(offset + PAGE_SIZE)}
-              className="rounded border border-gray-600 px-3 py-2 text-sm disabled:opacity-40"
+              className="min-h-11 rounded-lg border border-outline bg-surface-raised px-3 py-2 text-sm text-content transition-colors hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40"
             >
               Next
             </button>
@@ -335,13 +335,13 @@ export default function PlayersPage() {
 
         <section aria-label="Selected player statistics" className="min-w-0">
           {!selectedPlayerId && (
-            <div className="rounded-xl border border-dashed border-gray-600 p-8 text-gray-400">
+            <div className="rounded-xl border border-dashed border-outline p-8 text-muted">
               Select a player to view their season statistics.
             </div>
           )}
 
           {statsLoading && (
-            <p role="status" className="text-gray-400">
+            <p role="status" className="text-muted">
               Loading player statistics…
             </p>
           )}
@@ -355,14 +355,14 @@ export default function PlayersPage() {
           {playerData && totals && !statsLoading && (
             <>
               <header className="mb-5">
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-2xl font-bold text-content">
                   {playerData.player.name}
                 </h2>
-                <p className="mt-1 text-gray-400">
+                <p className="mt-1 text-muted">
                   {playerData.player.nation_code} · Born{" "}
                   {playerData.player.birth_year}
                 </p>
-                <p className="mt-2 text-sm text-gray-400">
+                <p className="mt-2 text-sm text-muted">
                   Totals cover all Premier League clubs represented in{" "}
                   {playerData.season}, regardless of the club filter.
                 </p>
@@ -391,8 +391,8 @@ export default function PlayersPage() {
                 />
               </div>
 
-              <section className="mb-6 rounded-xl border border-gray-700 bg-gray-900 p-4">
-                <h3 className="mb-4 text-lg font-semibold text-white">
+              <section className="mb-6 rounded-xl border border-outline bg-surface p-4">
+                <h3 className="mb-4 text-lg font-semibold text-content">
                   Attacking output
                 </h3>
 
@@ -401,21 +401,40 @@ export default function PlayersPage() {
                     <BarChart data={chartData}>
                       <CartesianGrid
                         strokeDasharray="3 3"
-                        stroke="#374151"
+                        stroke="var(--chart-grid)"
                       />
-                      <XAxis dataKey="name" stroke="#9ca3af" />
-                      <YAxis allowDecimals={false} stroke="#9ca3af" />
+
+                      <XAxis
+                        dataKey="name"
+                        stroke="var(--text-secondary)"
+                        tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
+                      />
+
+                      <YAxis
+                        allowDecimals={false}
+                        stroke="var(--text-secondary)"
+                        tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
+                      />
+
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#111827",
-                          borderColor: "#4b5563",
-                          color: "#ffffff",
+                          backgroundColor: "var(--surface)",
+                          borderColor: "var(--border-strong)",
+                          color: "var(--text-primary)",
+                        }}
+                        labelStyle={{
+                          color: "var(--text-primary)",
+                          marginBottom: 6,
+                        }}
+                        cursor={{
+                          fill: "var(--surface-hover)",
                         }}
                       />
+
                       <Bar
                         dataKey="value"
                         name="Total"
-                        fill="#3b82f6"
+                        fill="var(--chart-series-a)"
                         radius={[4, 4, 0, 0]}
                       />
                     </BarChart>
@@ -423,8 +442,8 @@ export default function PlayersPage() {
                 </div>
               </section>
 
-              <section className="rounded-xl border border-gray-700 bg-gray-900 p-4">
-                <h3 className="mb-4 text-lg font-semibold text-white">
+              <section className="rounded-xl border border-outline bg-surface p-4">
+                <h3 className="mb-4 text-lg font-semibold text-content">
                   Club breakdown
                 </h3>
 
@@ -434,7 +453,7 @@ export default function PlayersPage() {
                       Player statistics by club
                     </caption>
 
-                    <thead className="border-b border-gray-700 text-gray-400">
+                    <thead className="border-b border-outline text-muted">
                       <tr>
                         {[
                           "Club",
@@ -459,21 +478,29 @@ export default function PlayersPage() {
                       {playerData.clubs.map((club) => (
                         <tr
                           key={club.team_id}
-                          className="border-b border-gray-800"
+                          className="border-b border-outline"
                         >
                           <th
                             scope="row"
-                            className="px-3 py-3 font-medium text-white"
+                            className="px-3 py-3 font-medium text-content"
                           >
                             {club.team_name}
                           </th>
-                          <td className="px-3 py-3">{club.position}</td>
-                          <td className="px-3 py-3">{club.appearances}</td>
-                          <td className="px-3 py-3">
+                          <td className="px-3 py-3 text-content">
+                            {club.position}
+                          </td>
+                          <td className="px-3 py-3 text-content">
+                            {club.appearances}
+                          </td>
+                          <td className="px-3 py-3 text-content">
                             {club.minutes.toLocaleString()}
                           </td>
-                          <td className="px-3 py-3">{club.goals}</td>
-                          <td className="px-3 py-3">{club.assists}</td>
+                          <td className="px-3 py-3 text-content">
+                            {club.goals}
+                          </td>
+                          <td className="px-3 py-3 text-content">
+                            {club.assists}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -496,9 +523,9 @@ function StatCard({
   value: number | string;
 }) {
   return (
-    <div className="rounded-xl border border-gray-700 bg-gray-800 p-4">
-      <p className="text-sm text-gray-400">{label}</p>
-      <p className="mt-1 text-2xl font-bold text-white">{value}</p>
+    <div className="rounded-xl border border-outline bg-surface-raised p-4">
+      <p className="text-sm text-muted">{label}</p>
+      <p className="mt-1 text-2xl font-bold text-content">{value}</p>
     </div>
   );
 }
