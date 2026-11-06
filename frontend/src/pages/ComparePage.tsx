@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Bar,
   BarChart,
@@ -37,6 +37,22 @@ export default function ComparePage() {
   const [comparison, setComparison] = useState<Comparison | null>(null);
   const [comparing, setComparing] = useState(false);
   const [comparisonError, setComparisonError] = useState<string | null>(null);
+  const analysisRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (!comparison) {
+      return;
+    }
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    analysisRef.current?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  }, [comparison]);  
 
   useEffect(() => {
     let ignore = false;
@@ -323,7 +339,10 @@ export default function ComparePage() {
       {first && second && (
         <>
           <header className="mb-6">
-            <h2 className="text-2xl font-semibold text-content">
+            <h2
+              ref={analysisRef}
+              className="scroll-mt-24 text-2xl font-semibold text-content"
+            >              
               {first.team.name} vs {second.team.name}
             </h2>
 

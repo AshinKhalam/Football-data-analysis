@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Bar,
   BarChart,
@@ -39,6 +39,22 @@ export default function PlayersPage() {
   const [playerData, setPlayerData] = useState<PlayerWithStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(false);
   const [statsError, setStatsError] = useState<string | null>(null);
+  const analysisRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!playerData || statsLoading) {
+      return;
+    }
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    analysisRef.current?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  }, [playerData, statsLoading]);
 
   useEffect(() => {
     let ignore = false;
@@ -333,7 +349,11 @@ export default function PlayersPage() {
           </div>
         </section>
 
-        <section aria-label="Selected player statistics" className="min-w-0">
+        <section
+          ref={analysisRef}
+          aria-label="Selected player statistics"
+          className="min-w-0 scroll-mt-24"
+        >
           {!selectedPlayerId && (
             <div className="rounded-xl border border-dashed border-outline p-8 text-muted">
               Select a player to view their season statistics.

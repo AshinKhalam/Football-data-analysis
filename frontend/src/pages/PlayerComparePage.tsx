@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -10,7 +10,7 @@ import {
   YAxis,
 } from "recharts";
 
-import { comparePlayers } from "../api/football";
+import { comparePlayers, getPlayers } from "../api/football";
 import PlayerPicker from "../components/PlayerPicker";
 import type { Player, PlayerWithStats } from "../types/football";
 
@@ -29,6 +29,79 @@ export default function PlayerComparePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<"totals" | "per90">("totals");
+  const analysisRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadDefaultPlayers() {
+      try {
+        const [firstResults, secondResults] = await Promise.all([
+          getPlayers(
+            {
+              search: "Haaland",
+              limit: 10,
+            },
+            controller.signal,
+          ),
+          getPlayers(
+            {
+              search: "Igor Thiago",
+              limit: 10,
+            },
+            controller.signal,
+          ),
+        ]);
+
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        const defaultFirst = firstResults.find(
+          (player) => player.name === "Erling Haaland",
+        );
+
+        const defaultSecond = secondResults.find(
+          (player) => player.name === "Igor Thiago",
+        );
+
+        if (defaultFirst) {
+          setFirstPlayer((current) => current ?? defaultFirst);
+        }
+
+        if (defaultSecond) {
+          setSecondPlayer((current) => current ?? defaultSecond);
+        }
+      } catch {
+        if (!controller.signal.aborted) {
+          setError(
+            "Unable to load the default players. You can still search and select players manually.",
+          );
+        }
+      }
+    }
+
+    void loadDefaultPlayers();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!comparison) {
+      return;
+    }
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    analysisRef.current?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  }, [comparison]);  
 
   function chooseFirst(player: Player) {
     setFirstPlayer(player);
@@ -231,7 +304,10 @@ export default function PlayerComparePage() {
 
       {first && second && (
         <>
-          <h2 className="mb-4 text-2xl font-semibold text-content">
+          <h2
+            ref={analysisRef}
+            className="scroll-mt-24 mb-4 text-2xl font-semibold text-content"
+          >
             {first.player.name} vs {second.player.name}
           </h2>
 

@@ -57,46 +57,62 @@ export default function LeagueTable({
   }
 
   return (
-    <section className="mb-8 rounded-xl border border-outline bg-surface p-3 sm:p-4">
-      <h2 className="mb-3 text-lg font-semibold text-content sm:text-xl sm:mb-4">
+    <section className="mb-8 min-w-0 rounded-xl border border-outline bg-surface p-2 sm:p-4">
+      <h2 className="mb-3 text-lg font-semibold text-content sm:text-xl">
         Premier League table — 2025/26
       </h2>
 
-      <p className="mb-3 text-sm text-muted sm:mb-4">
+      <p className="mb-3 text-xs text-muted sm:text-sm">
         Select a team name to view its statistics below.
       </p>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[440px] border-collapse text-left text-xs sm:text-sm">
+        <table className="w-full table-fixed border-separate border-spacing-0 text-[10px] leading-tight text-content sm:text-sm">
           <caption className="sr-only">
-            Premier League standings for the 2025/26 season
+            Premier League standings for the 2025/26 season.
+            P: played; W: wins; D: draws; L: losses;
+            GF–GA: goals for and against; GD: goal difference; Pts: points.
           </caption>
 
-          <thead className="border-b border-outline text-muted">
+          <colgroup>
+            <col className="w-[6%]" />
+            <col className="w-[30%]" />
+            <col className="w-[7%]" />
+            <col className="w-[7%]" />
+            <col className="w-[7%]" />
+            <col className="w-[7%]" />
+            <col className="w-[16%]" />
+            <col className="w-[10%]" />
+            <col className="w-[10%]" />
+          </colgroup>
+
+          <thead className="text-muted">
             <tr>
               <th
                 scope="col"
-                className="px-2 py-2 text-right sm:px-3 sm:py-3"
+                className="border-b border-outline px-0.5 py-3 text-center sm:px-2"
               >
-                Pos
+                #
               </th>
 
               <th
                 scope="col"
-                className="sticky left-0 z-10 bg-surface px-2 py-2 text-left sm:px-3 sm:py-3"
+                className="border-b border-outline px-1 py-3 text-left sm:px-2"
               >
                 Team
               </th>
 
-              {["P", "W", "D", "L", "GF", "GA", "GD", "Pts"].map((heading) => (
-                <th
-                  key={heading}
-                  scope="col"
-                  className="px-2 py-2 text-right sm:px-3 sm:py-3"
-                >
-                  {heading}
-                </th>
-              ))}
+              {["P", "W", "D", "L", "GF–GA", "GD", "Pts"].map(
+                (heading) => (
+                  <th
+                    key={heading}
+                    scope="col"
+                    className="whitespace-nowrap border-b border-outline px-0.5 py-3 text-center sm:px-2"
+                  >
+                    {heading}
+                  </th>
+                ),
+              )}
             </tr>
           </thead>
 
@@ -104,25 +120,26 @@ export default function LeagueTable({
             {rows.map(({ team, stats }) => {
               const selected = team.team_id === selectedTeamId;
 
+              const numberCell =
+                "whitespace-nowrap border-b border-outline px-0.5 py-2 text-center tabular-nums sm:px-2 sm:py-3";
+
               return (
                 <tr
                   key={team.team_id}
                   onClick={() => onSelectTeam(team.team_id)}
-                  className={`group cursor-pointer transition-colors focus-within:bg-selection ${
-                    selected ? "bg-selection" : "hover:bg-surface-hover"
+                  className={`cursor-pointer ${
+                    selected
+                      ? "bg-selection"
+                      : "hover:bg-surface-hover focus-within:bg-selection"
                   }`}
                 >
-                  <td className="border-b border-outline px-2 py-2 text-right text-muted tabular-nums sm:px-3 sm:py-3">
+                  <td className={`${numberCell} text-muted`}>
                     {stats.rank}
                   </td>
 
                   <th
                     scope="row"
-                    className={`sticky left-0 z-10 border-b border-outline px-2 py-2 text-left font-medium sm:px-3 sm:py-3 ${
-                      selected
-                        ? "bg-selection"
-                        : "bg-surface group-hover:bg-surface-hover"
-                    }`}
+                    className="border-b border-outline px-1 py-2 text-left font-medium sm:px-2 sm:py-3"
                   >
                     <button
                       type="button"
@@ -132,42 +149,41 @@ export default function LeagueTable({
                       }}
                       aria-pressed={selected}
                       aria-label={`View ${team.name} analytics`}
-                      className="min-h-9 text-left text-content underline-offset-4 hover:underline sm:min-h-11"
+                      title={team.name}
+                      className="flex min-h-11 w-full items-center text-left text-content"
                     >
-                      {teamDisplayName(team.name)}
+                      <span className="min-w-0 break-words">
+                        {teamDisplayName(team.name)}
+                      </span>
                     </button>
                   </th>
 
-                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                  <td className={numberCell}>
                     {stats.matches_played}
                   </td>
 
-                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                  <td className={numberCell}>
                     {stats.wins}
                   </td>
 
-                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                  <td className={numberCell}>
                     {stats.draws}
                   </td>
 
-                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                  <td className={numberCell}>
                     {stats.losses}
                   </td>
 
-                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
-                    {stats.goals_for}
+                  <td className={numberCell}>
+                    {stats.goals_for}–{stats.goals_against}
                   </td>
 
-                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
-                    {stats.goals_against}
-                  </td>
-
-                  <td className="border-b border-outline px-2 py-2 text-right text-content tabular-nums sm:px-3 sm:py-3">
+                  <td className={numberCell}>
                     {stats.goal_difference > 0 ? "+" : ""}
                     {stats.goal_difference}
                   </td>
 
-                  <td className="border-b border-outline px-2 py-2 text-right font-semibold text-content tabular-nums sm:px-3 sm:py-3">
+                  <td className={`${numberCell} font-semibold`}>
                     {stats.points}
                   </td>
                 </tr>
