@@ -45,7 +45,7 @@ export default function LeagueTable({
   }, []);
 
   if (loading) {
-    return <p className="text-muted">Loading league table…</p>;
+    return <p className="text-muted">Loading league table… The demo server may take about a minute to wake up after inactivity.</p>;
   }
 
   if (error) {

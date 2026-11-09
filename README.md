@@ -35,3 +35,24 @@ Built as a portfolio project to demonstrate frontend development, API integratio
 
 ### Database
 - PostgreSQL
+
+## Architecture
+
+## Running Locally
+
+### Prerequisites
+### Backend Setup
+### Database Setup and Data Import
+### Frontend Setup
+
+## Environment Variables
+
+## Data Sources
+
+## Checks and Testing
+
+## Known Limitations
+
+## Author
+
+## License
