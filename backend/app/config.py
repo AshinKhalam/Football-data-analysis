@@ -11,5 +11,5 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
     raise RuntimeError(
-        "Database url is missing. Specify it in backend/.env"
+        "Database url is missing. Specify it in the environment variables or in backend/.env"
         )
