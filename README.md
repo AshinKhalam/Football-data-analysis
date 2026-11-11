@@ -4,6 +4,23 @@ Live demo: https://football-data-analysis-zku8.onrender.com
 
 ## Screenshots
 
+### Desktop
+
+<img src="screenshots/league_table.png" alt="Premier League standings" width="900" />
+
+<img src="screenshots/team_statistics.png" alt="Team season statistics and charts" width="900" />
+
+<img src="screenshots/player_search.png" alt="Player search and filtering" width="900" />
+
+<img src="screenshots/comparison.png" alt="Side-by-side team comparison" width="900" />
+
+### Mobile
+
+<p>
+  <img src="screenshots/phone_table.png" alt="Mobile league table" width="280" />
+  <img src="screenshots/phone_comparison.png" alt="Mobile player comparison" width="280" />
+</p>
+
 ## About
 
 A full-stack Premier League statistics dashboard for exploring team performance, searching player statistics, and comparing teams and players across the 2025/26 season.
