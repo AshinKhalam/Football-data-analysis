@@ -201,11 +201,14 @@ export default function PlayersPage() {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <header className="mb-6">
+        <p className="text-xs font-semibold uppercase tracking-widest text-accent">
+          Premier League · 2025/26
+        </p>
         <h1 className="text-3xl font-bold text-content">
           Player Statistics
         </h1>
-        <p className="mt-2 text-muted">
-          Premier League · 2025/26
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
+          Search for players and view their season statistics. Use the filter to narrow down your search by club.
         </p>
       </header>
 
