@@ -262,7 +262,8 @@ export default function ComparePage() {
       <header className="mb-6">
         <p className="text-xs font-semibold uppercase tracking-widest text-accent">
           Premier League · 2025/26
-        </p>        
+        </p>  
+              
         <h1 className="text-3xl font-bold text-content">Compare Teams</h1>
 
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
