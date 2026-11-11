@@ -2,6 +2,8 @@
 
 Live demo: https://football-data-analysis-zku8.onrender.com
 
+> The backend uses Render’s free tier, so the first request after a period of inactivity may take a little longer while the service starts up.
+
 ## Screenshots
 
 ### Desktop
@@ -125,7 +127,7 @@ The application uses a static 2025/26 Premier League dataset.
 - Match results: [Football-Data.co.uk](https://www.football-data.co.uk/)
 - Player statistics and team standings: [FBref](https://fbref.com/)
 
-The data was imported into PostgreSQL and is served through the application’s FastAPI backend.
+The data was imported into PostgreSQL, hosted on Neon and is served through the application’s FastAPI backend.
 
 ## Deployment
 
