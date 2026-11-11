@@ -205,10 +205,10 @@ export default function PlayersPage() {
           Premier League · 2025/26
         </p>
 
-        <h1 className="text-3xl font-bold text-content">
+        <h1 className="mt-2 text-2xl font-bold tracking-tight text-content sm:text-3xl">
           Player Statistics
         </h1>
-        
+
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
           Search for players and view their season statistics. Use the filter to narrow down your search by club.
         </p>

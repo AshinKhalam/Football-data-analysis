@@ -253,10 +253,10 @@ export default function PlayerComparePage() {
           Premier League · 2025/26
         </p>
 
-        <h1 className="text-3xl font-bold text-content">
+        <h1 className="mt-2 text-2xl font-bold tracking-tight text-content sm:text-3xl">
           Compare Players
         </h1>
-        
+
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
           Compare the statistics of two players across various metrics.
         </p>
