@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { getPlayers } from "../api/football";
-import type { Player } from "../types/football";
+import { getPlayers, getTeams } from "../api/football";
+import type { Player, Team } from "../types/football";
 
 interface PlayerPickerProps {
   id: string;
@@ -19,24 +19,60 @@ export default function PlayerPicker({
   onSelect,
 }: PlayerPickerProps) {
   const [search, setSearch] = useState("");
+  const [teamId, setTeamId] = useState<string>("");
+  const [teams, setTeams] = useState<Team[]>([]);
   const [results, setResults] = useState<Player[]>([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const pickerRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
-    if (search.trim().length < 2) {
+    let active = true;
+
+    async function loadTeams() {
+      try {
+        const data = await getTeams();
+
+        if (active) {
+          setTeams(data);
+        }
+      } catch {
+        if (active) {
+          setError("Unable to load teams.");
+        }
+      }
+    }
+
+    void loadTeams();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const trimmedSearch = search.trim();
+
+    if (!teamId && trimmedSearch.length < 2) {
+      setResults([]);
+      setLoading(false);
       return;
     }
 
     const controller = new AbortController();
 
     const timer = window.setTimeout(() => {
-      async function searchPlayers() {
+      async function loadPlayers() {
         try {
           const data = await getPlayers(
             {
-              search: search.trim(),
-              limit: 10,
+              search: trimmedSearch || undefined,
+              teamId: teamId || undefined,
+              limit: 50,
             },
             controller.signal,
           );
@@ -46,7 +82,7 @@ export default function PlayerPicker({
           }
         } catch {
           if (!controller.signal.aborted) {
-            setError("Unable to search players.");
+            setError("Unable to load players.");
           }
         } finally {
           if (!controller.signal.aborted) {
@@ -55,29 +91,111 @@ export default function PlayerPicker({
         }
       }
 
-      void searchPlayers();
+      void loadPlayers();
     }, 300);
 
     return () => {
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [search]);
+  }, [search, teamId]);
+
+  useEffect(() => {
+    setHighlightedIndex(-1);
+  }, [results, isDropdownOpen]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        pickerRef.current &&
+        !pickerRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function changeSearch(value: string) {
     setSearch(value);
-    setResults([]);
+    setIsDropdownOpen(true);
+    setHighlightedIndex(-1);
     setError(null);
-    setLoading(value.trim().length >= 2);
+    setLoading(true);
   }
 
   function choosePlayer(player: Player) {
     onSelect(player);
-    setSearch("");
+    setSearch(player.name);
     setResults([]);
+    setIsDropdownOpen(false);
+    setHighlightedIndex(-1);
     setError(null);
     setLoading(false);
+    inputRef.current?.blur();
   }
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Escape") {
+      setIsDropdownOpen(false);
+      setHighlightedIndex(-1);
+      return;
+    }
+
+    if (!isDropdownOpen) {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        setIsDropdownOpen(true);
+      }
+
+      return;
+    }
+
+    if (visibleResults.length === 0) {
+      return;
+    }
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setHighlightedIndex((currentIndex) =>
+        currentIndex === visibleResults.length - 1
+          ? 0
+          : currentIndex + 1,
+      );
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setHighlightedIndex((currentIndex) =>
+        currentIndex <= 0
+          ? visibleResults.length - 1
+          : currentIndex - 1,
+      );
+    }
+
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      const playerToSelect =
+        highlightedIndex >= 0
+          ? visibleResults[highlightedIndex]
+          : visibleResults[0];
+
+      if (playerToSelect) {
+        choosePlayer(playerToSelect);
+      }
+    }
+  }
+
+  const visibleResults = results.filter((player) =>
+    player.name
+      .toLowerCase()
+      .includes(search.trim().toLowerCase()),
+  );
 
   return (
     <section className="min-w-0 rounded-xl border border-outline bg-surface p-4">
@@ -88,82 +206,134 @@ export default function PlayerPicker({
         {label}
       </label>
 
-      <input
-        id={id}
-        type="search"
-        value={search}
-        disabled={disabled}
-        maxLength={100}
-        onChange={(event) => changeSearch(event.target.value)}
-        placeholder="Type at least 2 characters"
-        className="w-full rounded-lg border border-outline bg-surface-raised px-3 py-2 text-content disabled:opacity-50"
-      />
+      <div
+        ref={pickerRef}
+        className="relative flex flex-col gap-2 sm:flex-row sm:items-start"
+      >
+        <div className="relative min-w-0 flex-1">
+          <input
+            ref={inputRef}
+            id={id}
+            type="search"
+            value={search}
+            disabled={disabled}
+            maxLength={100}
+            autoComplete="off"
+            role="combobox"
+            aria-expanded={isDropdownOpen}
+            aria-controls={`${id}-results`}
+            aria-autocomplete="list"
+            aria-activedescendant={
+              highlightedIndex >= 0
+                ? `${id}-option-${highlightedIndex}`
+                : undefined
+            }
+            onChange={(event) => changeSearch(event.target.value)}
+            onFocus={() => setIsDropdownOpen(true)}
+            onClick={() => setIsDropdownOpen(true)}
+            onKeyDown={handleKeyDown}
+            placeholder={
+              teamId
+                ? "Search players in selected team…"
+                : "Type at least 2 characters to search all players"
+            }
+            className="w-full rounded-lg border border-outline bg-surface-raised px-3 py-2 text-content disabled:opacity-50"
+          />
 
-      <div className="mt-3 min-h-12">
-        {selectedPlayer ? (
-          <p className="text-sm text-content">
-            Selected:{" "}
-            <span className="font-semibold text-content">
-              {selectedPlayer.name}
-            </span>
-            {" · "}
-            {selectedPlayer.nation_code}
-          </p>
-        ) : (
-          <p className="text-sm text-muted">
-            No player selected.
-          </p>
-        )}
+          {isDropdownOpen && (teamId || search.trim().length >= 2) && (
+            <div
+              id={`${id}-results`}
+              role="listbox"
+              className="absolute top-full left-0 z-20 mt-2 w-full overflow-hidden rounded-lg border border-outline bg-surface-raised shadow-lg"
+            >
+              {loading && (
+                <p className="px-3 py-3 text-sm text-muted">
+                  Loading players…
+                </p>
+              )}
+
+              {!loading && error && (
+                <p className="px-3 py-3 text-sm text-red-300">
+                  {error}
+                </p>
+              )}
+
+              {!loading &&
+                !error &&
+                visibleResults.length === 0 && (
+                  <p className="px-3 py-3 text-sm text-muted">
+                    No matching players.
+                  </p>
+                )}
+
+              {!loading &&
+                !error &&
+                visibleResults.length > 0 && (
+                  <ul className="max-h-64 overflow-y-auto">
+                    {visibleResults.map((player, index) => {
+                      const isHighlighted =
+                        index === highlightedIndex;
+
+                      return (
+                        <li
+                          key={player.player_id}
+                          id={`${id}-option-${index}`}
+                          role="option"
+                          aria-selected={isHighlighted}
+                        >
+                          <button
+                            type="button"
+                            disabled={disabled}
+                            onClick={() => choosePlayer(player)}
+                            onMouseEnter={() =>
+                              setHighlightedIndex(index)
+                            }
+                            className={`flex w-full items-center justify-between gap-3 border-b border-outline px-3 py-2 text-left last:border-b-0 ${
+                              isHighlighted
+                                ? "bg-surface-hover"
+                                : "hover:bg-surface-hover"
+                            } disabled:opacity-50`}
+                          >
+                            <span className="min-w-0 truncate text-content">
+                              {player.name}
+                            </span>
+
+                            <span className="shrink-0 text-sm text-muted">
+                              {player.nation_code}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+            </div>
+          )}
+        </div>
+
+        <select
+          value={teamId}
+          disabled={disabled}
+          autoComplete="off"
+          onChange={(event) => {
+            setTeamId(event.target.value);
+            setSearch("");
+            setResults([]);
+            setError(null);
+            setIsDropdownOpen(false);
+            setHighlightedIndex(-1);
+          }}
+          className="w-full rounded-lg border border-outline bg-surface-raised px-3 py-2 text-content disabled:opacity-50 sm:w-56"
+        >
+          <option value="">All teams</option>
+
+          {teams.map((team) => (
+            <option key={team.team_id} value={team.team_id}>
+              {team.name}
+            </option>
+          ))}
+        </select>
       </div>
-
-      {loading && (
-        <p role="status" className="mt-2 text-sm text-muted">
-          Searching…
-        </p>
-      )}
-
-      {error && (
-        <p role="alert" className="mt-2 text-sm text-red-300">
-          {error}
-        </p>
-      )}
-
-      {!loading &&
-        !error &&
-        search.trim().length >= 2 &&
-        results.length === 0 && (
-          <p className="mt-2 text-sm text-muted">
-            No matching players.
-          </p>
-        )}
-
-      {!loading && results.length > 0 && (
-        <>
-          <ul className="mt-2 max-h-64 space-y-2 overflow-y-auto">
-            {results.map((player) => (
-              <li key={player.player_id}>
-                <button
-                  type="button"
-                  disabled={disabled}
-                  onClick={() => choosePlayer(player)}
-                  className="w-full rounded-lg border border-outline bg-surface-raised p-3 text-left hover:border-outline-strong disabled:opacity-50"
-                >
-                  <span className="block text-content">
-                    {player.name}
-                  </span>
-                  <span className="text-sm text-muted">
-                    {player.nation_code} · Born {player.birth_year}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-
-          <p className="mt-2 text-xs text-muted">
-            Showing up to 10 matches. Refine your search if needed.
-          </p>
-        </>
-      )}
     </section>
   );
 }
