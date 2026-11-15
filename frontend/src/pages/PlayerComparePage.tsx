@@ -266,7 +266,6 @@ export default function PlayerComparePage() {
         <PlayerPicker
           id="first-player-search"
           label="Player A"
-          selectedPlayer={firstPlayer}
           disabled={loading}
           onSelect={chooseFirst}
         />
@@ -274,7 +273,6 @@ export default function PlayerComparePage() {
         <PlayerPicker
           id="second-player-search"
           label="Player B"
-          selectedPlayer={secondPlayer}
           disabled={loading}
           onSelect={chooseSecond}
         />

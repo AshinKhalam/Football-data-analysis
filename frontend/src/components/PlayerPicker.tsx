@@ -6,7 +6,6 @@ import type { Player, Team } from "../types/football";
 interface PlayerPickerProps {
   id: string;
   label: string;
-  selectedPlayer: Player | null;
   disabled: boolean;
   onSelect: (player: Player) => void;
 }
@@ -14,7 +13,6 @@ interface PlayerPickerProps {
 export default function PlayerPicker({
   id,
   label,
-  selectedPlayer,
   disabled,
   onSelect,
 }: PlayerPickerProps) {

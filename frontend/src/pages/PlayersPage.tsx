@@ -109,7 +109,6 @@ export default function PlayersPage() {
       <PlayerPicker
         id="selected-player"
         label="Select player"
-        selectedPlayer={selectedPlayer}
         disabled={false}
         onSelect={setSelectedPlayer}
       />
